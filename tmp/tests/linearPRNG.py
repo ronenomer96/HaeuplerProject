@@ -3,16 +3,24 @@ Input
  seed- starting seed (X0)
  desiredLength- length of the desired output
 """
+import numpy as np
 import random
 c=0
-m=(2**31)-1
-a=48271
+m=np.int((2**31)-1)
+a=np.int(48271)
 def linearPRNG(seed,desiredLength):
     newString=seed
-    while (len(newString)<desiredLength):
-        listOfStrings=[newString[start:start+32] for start in range(0, len(newString), 32)]
-        for curStr in listOfStrings:
-            newString+=bin((int(curStr,2)*a)%m)[2:]
+    listOfStrings=[newString[start:start+32] for start in range(0,len(newString),32)]
+    listOfInts=[]
+    for curStr in listOfStrings:
+        listOfInts.append(int(curStr,2)) 
+    while (len(newString) < desiredLength):
+       tmpList=[]
+       for curVar in listOfInts:
+           tmp=((curVar*a)%m)
+           newString+=np.binary_repr(tmp,32)
+           tmpList.append(tmp)
+       listOfInts+=tmpList
     return newString
 
 
