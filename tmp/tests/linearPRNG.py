@@ -32,6 +32,6 @@ def linearPRNG(seed,desiredLength):
 x=random.randint(0,2**1000-1)
 y=bin(x)[2:]    
 print(datetime.datetime.now())
-z=linearPRNG(y,10**6)
+z=linearPRNG(y,10**8)
 print(datetime.datetime.now())
-print(len(z))'   
+print(len(z))  
