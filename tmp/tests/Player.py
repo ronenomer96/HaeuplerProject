@@ -22,12 +22,12 @@ class Player:
              return finalPrngSeed
          return -1
     
-    def createR(self,prngSeed,neededLength):
+    def createR(self,prngSeed,neededLength,hashLength,protoLength):
         if (neededLength > 10**8):
             R=linearPRNG.linearPRNG(prngSeed,10**8) #because we cannot compute higher values
         else:
             R=linearPRNG.linearPRNG(prngSeed,neededLength)
-        self.prot=Protocol.Protocol(R,self.seedLength,0)
+        self.prot=Protocol.Protocol(R,1,hashLength,protoLength)
         return 
     def computeHashes(self):
         return self.prot.getHashes()

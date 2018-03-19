@@ -4,21 +4,21 @@ import reedsolo as rs
 import math
 import random
 import Channel
+
 #add max length to protocol to stop
 
-errorChance=0.0001
-seedSize=5000
+errorChance=0.001
+seedSize=10
 iterSize=20 #k
-iterNum=1000 #n0
-prngSeedSize=4*math.ceil(math.sqrt(errorChance)*iterNum)
-#prngSeedSize = 10000
+protoLength=1000#n0
+prngSeedSize=4*math.ceil(math.sqrt(errorChance)*protoLength)
+hashLength=100
 outerLoopNum=10000 #N
 
 Alice=Player.Player("Alice",True,seedSize)
 Bob=Player.Player("Bob",False,seedSize)
 randomSeed=Alice.createShortPrngSeed(prngSeedSize)
-Alice.createR(randomSeed,iterNum**2)
-
+Alice.createR(randomSeed,protoLength**2,hashLength,protoLength)
 #transfer seed between both parties
 numofsymbolstocorrect=math.ceil(len(randomSeed)*errorChance)
 encdec = rs.RSCodec(numofsymbolstocorrect)
@@ -27,7 +27,7 @@ encodedSeed=encdec.encode(randomSeed)
 prngSeedMsg=Channel.Channel(encodedSeed.decode("latin-1"),errorChance)
 
 receivedSeed=encdec.decode(prngSeedMsg.encode("latin-1"))
-Bob.createR(receivedSeed.decode("latin-1"),iterNum**2)
+Bob.createR(receivedSeed.decode("latin-1"),protoLength**2,hashLength,protoLength)
 
 for i in range(0,1):
     aHashes=Alice.computeHashes()

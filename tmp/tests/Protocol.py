@@ -5,7 +5,7 @@ import JumpingPointer as JP
 
 class Protocol:
     seedLength=-1 # paramater (change in simulations)
-    
+    hashLength=-1
     
     mp1=-1
     mp2=-1
@@ -16,6 +16,7 @@ class Protocol:
     transcript=""
     originalR=""
     R=""
+    protoLength=-1
     
     l=-1
     Hgap=""
@@ -27,13 +28,15 @@ class Protocol:
     jp= JP.JumpingPointer()
     currentVertexNum=-1
     
-    def __init__(self,R,seedLength,vertexNum):
+    def __init__(self,R,vertexNum,hashLength,protoLength):
         self.gap=0
         self.gap_error=0
         self.R=R
         self.originalR=R
-        self.seedLength=seedLength
-        self.currentVertexNum=vertexNum;
+        self.currentVertexNum=vertexNum
+        self.hashLength=hashLength
+        self.protoLength=protoLength
+        self.seedLength=2*protoLength #should be 65*sqrt(error)*protoLength
         return
     
     
@@ -64,10 +67,10 @@ class Protocol:
         currentSeed=self.R[0:self.seedLength]
         self.R=self.R[self.seedLength+1:]
         #tmp=str(self.gap)
-        self.Hgap=Hash_fun.hash_fun(currentSeed,str(self.gap))
-        self.Ht=Hash_fun.hash_fun(currentSeed,self.transcript)
-        self.Hmp1=Hash_fun.hash_fun(currentSeed,self.transcript[0:self.mp1])
-        self.Hmp2=Hash_fun.hash_fun(currentSeed,self.transcript[0:self.mp2])
+        self.Hgap=Hash_fun.hash_fun(currentSeed,str(self.gap)+bin(self.gap)[2:],self.hashLength)
+        self.Ht=Hash_fun.hash_fun(currentSeed,self.transcript+bin(len(self.transcript))[2:],self.hashLength)
+        self.Hmp1=Hash_fun.hash_fun(currentSeed,self.transcript[0:self.mp1]+bin(len(self.transcript[0:self.mp1]))[2:],self.hashLength)
+        self.Hmp2=Hash_fun.hash_fun(currentSeed,self.transcript[0:self.mp2]+bin(len(self.transcript[0:self.mp2]))[2:],self.hashLength)
         return [self.Hgap,self.Ht,self.Hmp1,self.Hmp2]
     def checkHashes(self,receivedHashes):
         self.receivedHashes=receivedHashes
