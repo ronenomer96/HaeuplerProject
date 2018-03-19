@@ -4,19 +4,18 @@ import reedsolo as rs
 import math
 import random
 import Channel
+#add max length to protocol to stop
 
-
-errorChance=0.1
+errorChance=0.0001
 seedSize=5000
-hashSize=100
 iterSize=20 #k
 iterNum=1000 #n0
 prngSeedSize=4*math.ceil(math.sqrt(errorChance)*iterNum)
 #prngSeedSize = 10000
 outerLoopNum=10000 #N
 
-Alice=Player.Player("Alice",True,hashSize,seedSize)
-Bob=Player.Player("Bob",False,hashSize,seedSize)
+Alice=Player.Player("Alice",True,seedSize)
+Bob=Player.Player("Bob",False,seedSize)
 randomSeed=Alice.createShortPrngSeed(prngSeedSize)
 Alice.createR(randomSeed,iterNum**2)
 
@@ -36,24 +35,26 @@ for i in range(0,1):
     aMsgs=[]
     bMsgs=[]
     for j in range (0,4):
-        aMsgs.append(Channel.Channel(aHashes[j]))
-        bMsgs.append(Channel.Channel(bHashes[j]))
+        aMsgs.append(Channel.Channel(aHashes[j],errorChance))
+        bMsgs.append(Channel.Channel(bHashes[j],errorChance))
     Alice.receiveHashes(bMsgs)
     Bob.receiveHashes(aMsgs)
     for j in range (0,iterSize):
         #Alice's part
-        if (Alice.computeHashes()):
+        if (Alice.compareHashes()):
             msg=Alice.runTurn()
-            Bob.receiveMsg(Channel.Channel(msg))
+            Bob.receiveMsg(Channel.Channel(msg,errorChance))
         else:
-            Bob.receiveMsg(Channel.Channel(str(random.randint(0,1))))
+            Bob.receiveMsg(Channel.Channel(str(random.randint(0,1)),errorChance))
         #Bob's part
-        if (Bob.computeHashes()):
+        if (Bob.compareHashes()):
             msg=Bob.runTurn()
-            Alice.receiveMsg(Channel.Channel(msg))
+            Alice.receiveMsg(Channel.Channel(msg,errorChance))
         else:
-            Alice.receiveMsg(Channel.Channel(str(random.randint(0,1))))
+            Alice.receiveMsg(Channel.Channel(str(random.randint(0,1)),errorChance))
     Alice.rewind()
     Bob.rewind()
-       
+print(Alice.prot.transcript)
+print(Bob.prot.transcript)
+print(Alice.prot.transcript==Bob.prot.transcript)       
         

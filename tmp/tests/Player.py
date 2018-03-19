@@ -6,13 +6,11 @@ class Player:
     name=""
     turn=False
     seedLength=-1
-    hashLength=-1
     prot=0
-    def __init__(self,name,turn,hashLength,seedLength):
+    def __init__(self,name,turn,seedLength):
         self.name=name
         self.turn=turn
         self.seedLength=seedLength
-        self.hashLength=hashLength
         return
     
     def createShortPrngSeed(self,prngSeedSize):
@@ -29,7 +27,7 @@ class Player:
             R=linearPRNG.linearPRNG(prngSeed,10**8) #because we cannot compute higher values
         else:
             R=linearPRNG.linearPRNG(prngSeed,neededLength)
-        self.prot=Protocol.Protocol(R,self.seedLength,self.hashLength,0)
+        self.prot=Protocol.Protocol(R,self.seedLength,0)
         return 
     def computeHashes(self):
         return self.prot.getHashes()

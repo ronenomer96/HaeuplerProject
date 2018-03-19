@@ -1,7 +1,8 @@
-def hash_fun(seed, input, out_len):
-    if len(seed)/len(input) != out_len:
-        print("LENGTHS DOES NOT CONSIST")
-        return
+def hash_fun(seed, input):
+    if len(input) == 0:
+        return ""
+    elif len(seed)%len(input) != 0:
+        input=input.zfill(len(input)+len(seed)%len(input))
     len_input = len(input)
     len_seed = len(seed)
     output = ""
