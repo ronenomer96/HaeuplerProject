@@ -9,7 +9,7 @@ import Channel
 
 errorChance=0.001
 seedSize=10
-iterSize=20 #k
+iterSize=2 #k
 protoLength=1000#n0
 prngSeedSize=4*math.ceil(math.sqrt(errorChance)*protoLength)
 hashLength=100

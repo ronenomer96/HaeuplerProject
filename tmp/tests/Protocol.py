@@ -43,7 +43,7 @@ class Protocol:
     def runStep(self):
         currentStep=self.jp.get_cur_decision(self.currentVertexNum)
         self.currentVertexNum=self.currentVertexNum*2+currentStep
-        self.transcript+=str(currentStep)
+        self.transcript+=str(currentStep) 
         return str(currentStep)
     def receiveStep(self,step):
         self.transcript+=step

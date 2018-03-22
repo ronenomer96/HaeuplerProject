@@ -1,7 +1,10 @@
 import random
 ## change later to work without a socket ## 
 class JumpingPointer:
-    history = {}
+    history={}
+    def __init__(self):
+        self.history={}
+        return
     def get_cur_decision(self, vertex_num):
         if vertex_num in self.history.keys():
             return self.history[vertex_num]
